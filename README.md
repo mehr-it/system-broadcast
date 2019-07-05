@@ -9,13 +9,13 @@ some messages were missed while the broadcast channel was not subscribed.
 
 Implementing a publisher is very easy:
 
-	$broadcast = new SystemBroadcast(['host' => '127.0.0.1']);
+	$broadcast = new SystemBroadcast(['host' => '127.0.0.1'], 'my-channel');
 	$broadcast->publish('my-message');
 	
 	
 The corresponding listener would look like this:
 
-	$broadcast = new SystemBroadcast(['host' => '127.0.0.1']);
+	$broadcast = new SystemBroadcast(['host' => '127.0.0.1'], 'my-channel');
 	$broadcast->handler('my-message', function() {
 		// do something
 	})
@@ -40,7 +40,8 @@ process is not running for whatever reason, all messages published meanwhile are
 irrevocably lost for this client.
 
 Even if you cannot recover missed messages, you can check if you missed any published
-messages. Your handler can receive a sequence value and save it to a file:
+messages on the broadcast channel. Your handler can receive a sequence value and save
+it to a file:
 
 	$broadcast->handler('my-message', function($data, $broadcast) {
 		$seq = $broadcast->sequence();
